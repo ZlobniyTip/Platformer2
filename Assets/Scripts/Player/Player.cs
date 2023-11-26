@@ -1,25 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private int _health;
-    [SerializeField] private int _damage;
-    [SerializeField] private float _attackDistance;
+    [SerializeField] private int _maxHealth;
 
-    private Enemy _currentTarget;
-    private int _currentHealth;
     private int _currentCoins;
+    private int _currentHealth;
+
+    public event UnityAction<int, int> HealthChanged;
+
+    public int MaxHealth => _maxHealth;
 
     private void Start()
     {
-        _currentHealth = _health;
-    }
-
-    private void Update()
-    {
-        
+        _currentHealth = _maxHealth;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -33,17 +28,19 @@ public class Player : MonoBehaviour
         if (collision.gameObject.TryGetComponent(out Cherry cherry))
         {
             _currentHealth += cherry.Heal();
+            HealthChanged?.Invoke(_currentHealth, _maxHealth);
             Destroy(collision.gameObject);
         }
-    }
-
-    private void Attack()
-    {
-        _currentTarget.TakeDamage(_damage);
     }
 
     public void TakeDamage(int damage)
     {
         _currentHealth -= damage;
+        HealthChanged?.Invoke(_currentHealth, _maxHealth);
+
+        if (_currentHealth <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 }
