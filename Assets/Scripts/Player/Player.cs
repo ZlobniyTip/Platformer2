@@ -1,21 +1,8 @@
 using UnityEngine;
-using UnityEngine.Events;
 
-public class Player : MonoBehaviour
+public class Player : Health
 {
-    [SerializeField] private int _maxHealth;
-
     private int _currentCoins;
-    private int _currentHealth;
-
-    public event UnityAction<int, int> HealthChanged;
-
-    public int MaxHealth => _maxHealth;
-
-    private void Start()
-    {
-        _currentHealth = _maxHealth;
-    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -27,20 +14,8 @@ public class Player : MonoBehaviour
 
         if (collision.gameObject.TryGetComponent(out Cherry cherry))
         {
-            _currentHealth += cherry.Heal();
-            HealthChanged?.Invoke(_currentHealth, _maxHealth);
+            Heal(cherry.Heal());
             Destroy(collision.gameObject);
-        }
-    }
-
-    public void TakeDamage(int damage)
-    {
-        _currentHealth -= damage;
-        HealthChanged?.Invoke(_currentHealth, _maxHealth);
-
-        if (_currentHealth <= 0)
-        {
-            Destroy(gameObject);
         }
     }
 }

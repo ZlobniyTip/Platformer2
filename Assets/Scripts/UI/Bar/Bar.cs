@@ -1,12 +1,10 @@
 using System.Collections;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public abstract class Bar : MonoBehaviour
 {
-    [SerializeField] protected Slider Slider;
-    [SerializeField] protected TMP_Text Text;
+    [SerializeField] protected Image _healthBarFilling;
 
     private Coroutine _changeHealth;
     private float _recoveryRate = 0.2f;
@@ -14,14 +12,13 @@ public abstract class Bar : MonoBehaviour
     public void OnValueChanged(int value, int maxValue)
     {
         _changeHealth = StartCoroutine(ChangeHealthBar((float)value / maxValue));
-        Text.text = $"{value}/{maxValue}";
     }
 
     private IEnumerator ChangeHealthBar(float target)
     {
-        while (Slider.value != target)
+        while (_healthBarFilling.fillAmount != target)
         {
-            Slider.value = Mathf.MoveTowards(Slider.value, target, _recoveryRate * Time.deltaTime);
+            _healthBarFilling.fillAmount = Mathf.MoveTowards(_healthBarFilling.fillAmount, target, _recoveryRate * Time.deltaTime);
 
             yield return null;
         }

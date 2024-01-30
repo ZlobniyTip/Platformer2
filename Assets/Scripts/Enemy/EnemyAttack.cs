@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyAttack : Enemy
+public class EnemyAttack : MonoBehaviour
 {
     [SerializeField] private Player _target;
     [SerializeField] private float _pursuitDistance;
