@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class EnemyAttack : MonoBehaviour
@@ -6,8 +7,9 @@ public class EnemyAttack : MonoBehaviour
     [SerializeField] private float _pursuitDistance;
     [SerializeField] private float _attackDistance;
 
-    public float DelayBetweenAttacks { get; private set; } = 3;
-    public float TimeLastHit { get; private set; } = 0;
+    private Coroutine _attack;
+
+    private float _delayBetweenAttack = 2;
 
     public Player Target => _target;
     public float PursuitDistance => _pursuitDistance;
@@ -15,22 +17,28 @@ public class EnemyAttack : MonoBehaviour
 
     private int _damage = 10;
 
-    private void Update()
+    private void Start()
     {
-        TimeLastHit += Time.deltaTime;
-
-        if (TimeLastHit >= DelayBetweenAttacks)
-        {
-            if (Vector2.Distance(transform.position, Target.transform.position) < AttackDistance)
-            {
-                Attack();
-                TimeLastHit = 0;
-            }
-        }
+        _attack = StartCoroutine(TryAttack());
     }
 
     public void Attack()
     {
         _target.TakeDamage(_damage);
+    }
+
+    private IEnumerator TryAttack()
+    {
+        var DelayBetweenAttack = new WaitForSeconds(_delayBetweenAttack);
+
+        while (true)
+        {
+            if (Vector2.Distance(transform.position, _target.transform.position) < _attackDistance)
+            {
+                Attack();
+            }
+
+            yield return DelayBetweenAttack;
+        }
     }
 }

@@ -10,6 +10,8 @@ public class PlayerAttack : MonoBehaviour
     private float _timeBetweenAttack = 2;
     private float _timer;
 
+    public bool ShouldAttack { get; private set; } = false;
+
     private void Update()
     {
         Attack();
@@ -27,6 +29,9 @@ public class PlayerAttack : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                ShouldAttack = true;
+                ShouldAttack = false;
+
                 Collider2D[] enemies = Physics2D.OverlapCircleAll(_attackPoint.position, _attackDistance, _damageble);
 
                 if (enemies.Length != 0)
