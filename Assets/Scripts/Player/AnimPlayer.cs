@@ -12,26 +12,24 @@ public class AnimPlayer : MonoBehaviour
     public class Params
     {
         public static readonly int Speed = Animator.StringToHash(nameof(Speed));
-        public static readonly int IsGrounded = Animator.StringToHash(nameof(IsGrounded));
         public static readonly int Attack = Animator.StringToHash(nameof(Attack));
-        public static readonly int Idle = Animator.StringToHash(nameof(Idle));
     }
 
     private void Start()
     {
         _animator = GetComponent<Animator>();
         _movement = GetComponent<PlayerMovement>();
+        _attack = GetComponent<PlayerAttack>();
     }
 
     private void Update()
     {
-        SetupAnimation(_movement.Speed, _movement.IsGrounded, _attack.ShouldAttack);
+        SetupAnimation(_movement.CurrentSpeed, _attack.ShouldAttack);
     }
 
-    private void SetupAnimation(float speed, bool isGrounded, bool shouldAttack)
+    private void SetupAnimation(float speed, bool shouldAttack)
     {
-        _animator.SetFloat(Params.Speed, speed);
-        _animator.SetBool(Params.IsGrounded, isGrounded);
+        _animator.SetFloat(Params.Speed, Mathf.Abs(speed));
 
         if (shouldAttack)
             _animator.SetTrigger(Params.Attack);
