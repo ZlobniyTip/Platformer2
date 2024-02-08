@@ -10,6 +10,7 @@ public class Health : MonoBehaviour
     public event UnityAction<int, int> HealthChanged;
 
     public int MaxHealth => _maxHealth;
+    public int CurrentHealth => _currentHealth;
 
     private void Start()
     {
@@ -29,7 +30,10 @@ public class Health : MonoBehaviour
 
     public void Heal(int healValue)
     {
-        _currentHealth += healValue;
-        HealthChanged?.Invoke(_currentHealth, _maxHealth);
+        if (_currentHealth + healValue <= _maxHealth)
+        {
+            _currentHealth += healValue;
+            HealthChanged?.Invoke(_currentHealth, _maxHealth);
+        }
     }
 }
