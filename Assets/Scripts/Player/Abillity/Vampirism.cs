@@ -14,6 +14,7 @@ public class Vampirism : MonoBehaviour
 
     public void ActivateSpell(Collider2D enemy)
     {
+        _spellDurationTimer = 0;
         _vampirismCast = StartCoroutine(ActivateVampirism(enemy));
     }
 

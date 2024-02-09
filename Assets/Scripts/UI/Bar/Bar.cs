@@ -11,6 +11,11 @@ public abstract class Bar : MonoBehaviour
 
     public void OnValueChanged(int value, int maxValue)
     {
+        if (_changeHealth != null)
+        {
+            StopCoroutine(_changeHealth);
+        }
+
         _changeHealth = StartCoroutine(ChangeHealthBar((float)value / maxValue));
     }
 
@@ -22,5 +27,7 @@ public abstract class Bar : MonoBehaviour
 
             yield return null;
         }
+
+        yield break;
     }
 }

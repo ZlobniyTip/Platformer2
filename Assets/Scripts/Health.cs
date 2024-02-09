@@ -9,9 +9,6 @@ public class Health : MonoBehaviour
 
     public event UnityAction<int, int> HealthChanged;
 
-    public int MaxHealth => _maxHealth;
-    public int CurrentHealth => _currentHealth;
-
     private void Start()
     {
         _currentHealth = _maxHealth;
